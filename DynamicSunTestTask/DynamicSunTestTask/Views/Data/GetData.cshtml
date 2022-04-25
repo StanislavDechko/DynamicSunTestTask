@@ -1,0 +1,298 @@
+﻿@using DynamicSunTestTask.Extensions
+@using DynamicSunTestTask.Models
+@model IEnumerable<DynamicSunTestTask.Models.Record>
+
+@{
+    ViewData["Title"] = "Display";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DynamicSunTestTask</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+</head>
+<body>
+<div class="container">
+<div class="form_container">
+    <div class="view_type_button_container">
+        <button class="btn" id="view_btn" onclick="return onViewTypeClick();">Chart</button>
+    </div>
+    <form id="input_form" asp-action="GetData" asp-controller="Data" method="get" onsubmit="return isSubmittableForm();">
+        <div class="year_container">
+            <div class="form_radio_btn">
+                <input class="year_input input" type="radio" id="year_2010" name="year" value="2010"/>
+                <label for="year_2010" class="year_label">2010</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="year_input input" type="radio" id="year_2011" name="year" value="2011"/>
+                <label for="year_2011" class="year_label">2011</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="year_input input" type="radio" id="year_2012" name="year" value="2012"/>
+                <label for="year_2012" class="year_label">2012</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="year_input input" type="radio" id="year_2013" name="year" value="2013"/>
+                <label for="year_2013" class="year_label">2013</label>
+            </div>
+        </div>
+        <div class="month_container">
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_jan" name="month" value="1"/>
+                <label for="month_jan">Jan</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_feb" name="month" value="2"/>
+                <label for="month_feb">Feb</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_mar" name="month" value="3"/>
+                <label for="month_mar">Mar</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_apr" name="month" value="4"/>
+                <label for="month_apr">Apr</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_may" name="month" value="5"/>
+                <label for="month_may">May</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_jun" name="month" value="6"/>
+                <label for="month_jun">Jun</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_jul" name="month" value="7"/>
+                <label for="month_jul">Jul</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_aug" name="month" value="8"/>
+                <label for="month_aug">Aug</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_sep" name="month" value="9"/>
+                <label for="month_sep">Sep</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_oct" name="month" value="10"/>
+                <label for="month_oct">Oct</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_nov" name="month" value="11"/>
+                <label for="month_nov">Nov</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_dec" name="month" value="12"/>
+                <label for="month_dec">Dec</label>
+            </div>
+            <div class="form_radio_btn">
+                <input class="month_input input" type="radio" id="month_all" name="month" value="0"/>
+                <label for="month_all">All</label>
+            </div>
+        </div>
+    </form>
+</div>
+@if (Model != null)
+{
+    @if (Model.Any())
+    {
+            <div class="table" id="table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Temperature)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RelativeHumidity)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DewPoint)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Pressure)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.WindDirection)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.WindSpeed)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cloudiness)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CloudinessLowerBound)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.HorizontalVisibility)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NaturalPhenomena)
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.GroupBy(record => record.Date.ToString("dd.MM.yyyy")))
+                    {
+                        <tr>
+                            <th class="date_info" colspan="11">
+                                @Html.DisplayFor(modelItem => item.Key)
+                            </th>
+                        </tr>
+                        @foreach (var record in item)
+                        {
+                            <tr>
+                                <td>
+                                    @{
+                                        var time = record.Date.ToString("HH:mm");
+                                        @Html.DisplayFor(modelItem => time)
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.Temperature)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.RelativeHumidity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.DewPoint)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.Pressure)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.WindDirection)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.WindSpeed)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.Cloudiness)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.CloudinessLowerBound)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.HorizontalVisibility)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => record.NaturalPhenomena)
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart_container hidden" id="chart_container">
+                <div class="criteria_dropdown_container">
+                    <div class="criteria_dropdown">
+                        <button class="dropbtn">Criteria</button>
+                        <div class="dropdown-content">
+                            <a onclick="chooseCriteria(this)">Temperature</a>
+                            <a onclick="chooseCriteria(this)">RelativeHumidity</a>
+                            <a onclick="chooseCriteria(this)">DewPoint</a>
+                            <a onclick="chooseCriteria(this)">Pressure</a>
+                            <a onclick="chooseCriteria(this)">WindSpeed</a>
+                            <a onclick="chooseCriteria(this)">Cloudiness</a>
+                            <a onclick="chooseCriteria(this)">CloudinessLowerBound</a>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="no_info" id="criteria_choice_text">Choose criteria for a chart</h2>
+                <canvas id="chart"></canvas>
+            </div>
+    }
+    else
+    {
+        <h2 class="no_info">No information for current period of time</h2>
+    }
+}
+else
+{
+    <h2 class="no_info">Choose period of time</h2>
+}
+</div>
+<script type="text/javascript">
+    function chooseCriteria(btn) {
+        document.getElementById("criteria_choice_text").classList.add("hidden");
+        sessionStorage.setItem("criteria", btn.innerHTML);
+        const params = new Proxy(new URLSearchParams(window.location.search),
+            {
+                get: (searchParams, prop) => searchParams.get(prop),
+            });
+        let modelData;
+        let periodOfTime = `${toMonthName(params.month)} ${params.year}`;
+        let labels;
+
+        @{
+            IEnumerable<IGrouping<int, Record>> grouped;
+        }
+        if (params.month === null || params.month == 0) {
+            @{
+                grouped = Model?.GroupBy(record => record.Date.Month).ToList();
+            }
+            labels = @Html.Raw(Json.Serialize(Model?.GroupBy(record => record.Date.Month).Select(record => record.Key.ToMonth())));
+        } else {
+            @{
+                grouped = Model?.GroupBy(record => record.Date.Day).ToList();
+            }
+            labels = @Html.Raw(Json.Serialize(Model?.GroupBy(record => record.Date.Day).Select(record => record.Key)));
+        }
+        let criteria, symbol;
+        switch (btn.innerHTML) {
+        case "Temperature":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.Temperature))));
+            criteria = "temperature";
+            symbol = "℃";
+            break;
+        case "RelativeHumidity":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.RelativeHumidity))));
+            criteria = "relative humidity";
+            symbol = "%";
+            break;
+        case "DewPoint":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.DewPoint))));
+            criteria = "dew point";
+            symbol = "℃";
+            break;
+        case "Pressure":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.Pressure))));
+            criteria = "pressure";
+            symbol = "mmHg";
+            break;
+        case "WindSpeed":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.WindSpeed))));
+            criteria = "wind speed";
+            symbol = "mps";
+            break;
+        case "Cloudiness":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.Cloudiness))));
+            criteria = "cloudiness";
+            symbol = "%";
+            break;
+        case "CloudinessLowerBound":
+            modelData = @Html.Raw(Json.Serialize(grouped?.Select(record => record.Average(rec => rec.CloudinessLowerBound))));
+            criteria = "cloudiness lower bound";
+            symbol = "m";
+            break;
+        }
+
+        let label = `Average ${criteria} in ${periodOfTime} (${symbol})`;
+
+
+        createChart(modelData, label, labels);
+        return true;
+    }
+</script>
+<script src="/js/script.js"></script>
+</body>
+</html>

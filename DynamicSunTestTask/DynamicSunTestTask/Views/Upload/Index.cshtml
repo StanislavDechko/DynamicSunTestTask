@@ -1,0 +1,30 @@
+﻿@{
+ViewData["Title"] = "Upload file";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DynamicSunTestTask</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+<div class="file_upload_container">
+    <form onsubmit="return areFilesAttached()" asp-action="Upload" asp-controller="Upload" method="post" enctype="multipart/form-data">
+        <div class="processing_info">
+            <img class="processing_info" src="/images/info.svg"></img>
+            <p class="processing_info_text">If the files contain records for days that are already in database they will be overwritten</p>
+        </div>
+
+        <h2>Select files to upload</h2>
+        <input id="file-upload" name='uploads' type="file" multiple accept=".xls,.xlsx" onchange="return isValidFileType()">
+        <input id="submit-btn" class="submit_input" type="submit"/>
+
+    </form>
+</div>
+
+<script src="/js/script.js"></script>
+</body>
+</html>

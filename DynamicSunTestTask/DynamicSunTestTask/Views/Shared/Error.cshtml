@@ -1,0 +1,36 @@
+﻿@model DynamicSunTestTask.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DynamicSunTestTask</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+<div class="errors_container">
+    <h2>@Html.DisplayFor(modelItem => Model.InnerError)</h2>
+    <div class="errors">
+        @foreach (var errorPair in Model.Errors)
+        {
+            <h4 class="filename">
+                @Html.DisplayFor(modelItem => errorPair.Key)
+            </h4>
+            @foreach (var errorMessage in errorPair.Value)
+            {
+                <p>
+                    @Html.DisplayFor(modelItem => errorMessage)
+                </p>
+            }
+        }
+    </div>
+    <div>
+        <button onclick="location.href = '../Upload/Index';" class="btn">Reupload</button>
+        <button onclick="location.href = '../Data/GetData';" class="btn">Got it.</button>
+    </div>
+</div>
+</body>
+</html>
